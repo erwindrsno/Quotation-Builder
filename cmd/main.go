@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/erwindrsno/Quotation-Builder/internal/user"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -24,5 +25,6 @@ func main() {
 			"message": "pong",
 		})
 	})
+	router.GET("/users", user.Read)
 	router.Run() // listens on 0.0.0.0:8080 by default
 }
