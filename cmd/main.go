@@ -25,6 +25,6 @@ func main() {
 			"message": "pong",
 		})
 	})
-	router.GET("/users", user.Read)
+	router.GET("/users/:name", user.MiddlewareOne(), user.Read)
 	router.Run() // listens on 0.0.0.0:8080 by default
 }
