@@ -2,3 +2,5 @@
 tmp
 
 cmd/tmp
+
+.env
