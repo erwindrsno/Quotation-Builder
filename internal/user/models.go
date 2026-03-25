@@ -1,14 +1,18 @@
 package user
 
 import (
-	"github.com/google/uuid"
+	"time"
 )
 
 type User struct {
-	id       uuid.UUID
-	username string
-	password string
-	name     string
+	Id        int        `json:"id"`
+	Username  string     `json:"username"`
+	Password  string     `json:"password,omitempty"`
+	Name      string     `json:"name"`
+	RoleId    int        `json:"role_id"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+	DeletedAt *time.Time `json:"deleted_at"`
 }
 
 // DTOs
@@ -20,4 +24,8 @@ type Register struct {
 }
 
 type Read struct {
+	// Name filter also represents username
+	Name string `form:"name"`
+	Page int    `form:"page,default=1"`
+	Size int    `form:"size,default=10"`
 }
