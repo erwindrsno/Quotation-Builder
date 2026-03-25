@@ -18,5 +18,5 @@ const findQuery = `
 const findPasswordByUsername = `
   SELECT password 
   FROM users 
-  WHERE username $1
+  WHERE username = $1
 `

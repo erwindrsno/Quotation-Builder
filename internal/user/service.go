@@ -2,6 +2,9 @@ package user
 
 import (
 	"context"
+	"errors"
+	"fmt"
+
 	"github.com/erwindrsno/Quotation-Builder/internal/util"
 )
 
@@ -24,5 +27,21 @@ func (s *Service) Read(c context.Context, data *Read) ([]User, error) {
 	return s.Repo.Find(c, data.Name, data.Size, offset)
 }
 
-// func (s *Service) Login(c context.Context, data *Login) error {
-// }
+func (s *Service) Login(c context.Context, data *Login) error {
+	storedHash, err := s.Repo.FindStoredHashByUsername(c, data.Username)
+	if err != nil {
+		return errors.New("invalid username or password")
+	}
+
+	match, err := s.Hasher.Verify(data.Password, storedHash)
+	if err != nil {
+		fmt.Printf("%s\n", err.Error())
+		fmt.Printf("security check failed: 500\n")
+		return errors.New("an internal error occurred")
+	}
+	if !match {
+		return errors.New("invalid username or password")
+	}
+	fmt.Printf("ok login...\n")
+	return nil
+}

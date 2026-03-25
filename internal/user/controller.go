@@ -20,8 +20,8 @@ func (ctrl *Controller) Create(c *gin.Context) {
 		return
 	}
 
-	if errCreate := ctrl.Svc.Create(c.Request.Context(), &req); errCreate != nil {
-		responses.Fail(c, http.StatusBadRequest, errCreate.Error())
+	if err := ctrl.Svc.Create(c.Request.Context(), &req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
 	} else {
 		responses.Success(c, http.StatusCreated, gin.H{"success": true})
 	}
@@ -38,10 +38,24 @@ func (ctrl *Controller) Read(c *gin.Context) {
 
 	log.Printf("name=%s, page=%d, size=%d", req.Name, req.Page, req.Size)
 
-	if users, errRead := ctrl.Svc.Read(c.Request.Context(), &req); errRead != nil {
-		responses.Fail(c, http.StatusBadRequest, errRead.Error())
+	if users, err := ctrl.Svc.Read(c.Request.Context(), &req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
 	} else {
 		responses.Success(c, http.StatusOK, gin.H{"users": users})
 	}
 	return
+}
+
+func (ctrl *Controller) Login(c *gin.Context) {
+	var req Login
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
+	} else {
+		if err := ctrl.Svc.Login(c.Request.Context(), &req); err != nil {
+			responses.Fail(c, http.StatusUnauthorized, err.Error())
+			return
+		}
+		responses.Success(c, http.StatusOK, gin.H{"message": "ok"})
+	}
 }
