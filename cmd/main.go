@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/erwindrsno/Quotation-Builder/internal/database"
 	"github.com/erwindrsno/Quotation-Builder/internal/user"
+	"github.com/erwindrsno/Quotation-Builder/internal/util"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
@@ -15,8 +16,9 @@ func main() {
 	}
 	db := database.InitDB()
 	defer db.Close()
+	var hasher util.Hasher = util.ArgonHasher{}
 	userRepo := &user.Repository{DB: db}
-	userSvc := &user.Service{Repo: userRepo}
+	userSvc := &user.Service{Repo: userRepo, Hasher: hasher}
 	userCtrl := &user.Controller{Svc: userSvc}
 
 	router := gin.Default()

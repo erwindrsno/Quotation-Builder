@@ -14,3 +14,9 @@ const findQuery = `
   ORDER BY created_at ASC, id ASC
   LIMIT $3 OFFSET $4;
 `
+
+const findPasswordByUsername = `
+  SELECT password 
+  FROM users 
+  WHERE username $1
+`

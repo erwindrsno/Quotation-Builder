@@ -29,3 +29,8 @@ type Read struct {
 	Page int    `form:"page,default=1"`
 	Size int    `form:"size,default=10"`
 }
+
+type Login struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}

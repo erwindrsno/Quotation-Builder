@@ -42,3 +42,15 @@ func (r *Repository) Find(c context.Context, name string, limit, offset int) ([]
 
 	return users, nil
 }
+
+func (r *Repository) FindPasswordByUsername(c context.Context, username string) (string, error) {
+	row := r.DB.QueryRowContext(c, findQuery, username)
+
+	var password string
+
+	if err := row.Scan(&password); err == sql.ErrNoRows {
+		return "", err
+	} else {
+		return password, nil
+	}
+}
