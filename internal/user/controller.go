@@ -1,7 +1,7 @@
 package user
 
 import (
-	"log"
+	"errors"
 	"net/http"
 
 	"github.com/erwindrsno/Quotation-Builder/internal/responses"
@@ -36,8 +36,6 @@ func (ctrl *Controller) Read(c *gin.Context) {
 		return
 	}
 
-	log.Printf("name=%s, page=%d, size=%d", req.Name, req.Page, req.Size)
-
 	if users, err := ctrl.Svc.Read(c.Request.Context(), &req); err != nil {
 		responses.Fail(c, http.StatusBadRequest, err.Error())
 	} else {
@@ -51,11 +49,17 @@ func (ctrl *Controller) Login(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responses.Fail(c, http.StatusBadRequest, err.Error())
-	} else {
-		if err := ctrl.Svc.Login(c.Request.Context(), &req); err != nil {
-			responses.Fail(c, http.StatusUnauthorized, err.Error())
-			return
-		}
-		responses.Success(c, http.StatusOK, gin.H{"message": "ok"})
+		return
 	}
+	if err := ctrl.Svc.Login(c.Request.Context(), &req); err != nil {
+		if errors.Is(err, errInternalError) {
+			responses.Fail(c, http.StatusInternalServerError, err.Error())
+		} else if errors.Is(err, errInvalidCredentials) {
+			responses.Fail(c, http.StatusUnauthorized, err.Error())
+		} else {
+			responses.Fail(c, http.StatusBadRequest, err.Error())
+		}
+		return
+	}
+	responses.Success(c, http.StatusOK, gin.H{"message": "ok"})
 }

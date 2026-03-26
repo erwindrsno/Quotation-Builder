@@ -48,7 +48,8 @@ func (r *Repository) FindStoredHashByUsername(c context.Context, username string
 
 	var password string
 
-	if err := row.Scan(&password); err == sql.ErrNoRows {
+	err := row.Scan(&password)
+	if err != nil {
 		return "", err
 	}
 	return password, nil
