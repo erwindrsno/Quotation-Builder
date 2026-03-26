@@ -2,10 +2,9 @@ package user
 
 import (
 	"errors"
-	"net/http"
-
 	"github.com/erwindrsno/Quotation-Builder/internal/responses"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Controller struct {
