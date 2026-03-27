@@ -40,12 +40,29 @@ func main() {
 		})
 	})
 
-	// router.GET("/users/:name", user.MiddlewareOne(), user.Read)
-	router.GET("/users", userCtrl.Read)
-	router.POST("/users", userCtrl.Create)
-	router.POST("/users/login", userCtrl.Login)
-	router.GET("/roles", roleCtrl.Read)
-	router.POST("/roles", roleCtrl.Create)
-	router.GET("/companies", companyCtrl.Read)
+	api := router.Group("/api")
+	{
+		v1 := api.Group("/v1")
+		{
+			users := v1.Group("/users")
+			{
+				users.GET("/", userCtrl.Read)
+				users.POST("/", userCtrl.Create)
+				users.POST("/login", userCtrl.Login)
+			}
+
+			roles := v1.Group("/roles")
+			{
+				roles.GET("/", roleCtrl.Read)
+				roles.POST("/", roleCtrl.Create)
+			}
+
+			companies := v1.Group("/companies")
+			{
+				companies.GET("/", companyCtrl.Read)
+				companies.POST("/", companyCtrl.Create)
+			}
+		}
+	}
 	router.Run() // listens on 0.0.0.0:8080 by default
 }
