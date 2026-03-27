@@ -1,6 +1,2 @@
-.air.toml
 tmp
-
-cmd/tmp
-
 .env

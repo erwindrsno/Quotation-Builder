@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	//First of all, remember to clear tmp files before running the app. If not, configuring line 17 to the path is necessary
 	errEnv := godotenv.Load()
 	if errEnv != nil {
 		log.Fatal("Error loading .env file")
