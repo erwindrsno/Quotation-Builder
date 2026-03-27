@@ -16,7 +16,8 @@ const findPaginatedQuery = `
 `
 
 const findListQuery = `
-	SELECT id, name, created_at
+	SELECT id, name
 	FROM companies
   WHERE name ILIKE $1
+	ORDER BY name ASC;
 `

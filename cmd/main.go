@@ -1,13 +1,15 @@
 package main
 
 import (
+	"log"
+
+	"github.com/erwindrsno/Quotation-Builder/internal/company"
 	"github.com/erwindrsno/Quotation-Builder/internal/database"
 	"github.com/erwindrsno/Quotation-Builder/internal/role"
 	"github.com/erwindrsno/Quotation-Builder/internal/user"
 	"github.com/erwindrsno/Quotation-Builder/internal/util"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"log"
 )
 
 func main() {
@@ -26,6 +28,10 @@ func main() {
 	roleSvc := &role.Service{Repo: roleRepo}
 	roleCtrl := &role.Controller{Svc: roleSvc}
 
+	companyRepo := &company.Repository{DB: db}
+	companySvc := &company.Service{Repo: companyRepo}
+	companyCtrl := &company.Controller{Svc: companySvc}
+
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -39,5 +45,6 @@ func main() {
 	router.POST("/users/login", userCtrl.Login)
 	router.GET("/roles", roleCtrl.Read)
 	router.POST("/roles", roleCtrl.Create)
+	router.GET("/companies", companyCtrl.Read)
 	router.Run() // listens on 0.0.0.0:8080 by default
 }

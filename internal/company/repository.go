@@ -3,6 +3,7 @@ package company
 import (
 	"context"
 	"database/sql"
+	"log"
 )
 
 type Repository struct {
@@ -28,7 +29,7 @@ func (r *Repository) FindList(c context.Context, name string) ([]Company, error)
 
 	for rows.Next() {
 		var company Company
-		err := rows.Scan(&company.Id, &company.Name, &company.CreatedAt)
+		err := rows.Scan(&company.Id, &company.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -44,6 +45,7 @@ func (r *Repository) FindList(c context.Context, name string) ([]Company, error)
 }
 
 func (r *Repository) FindPaginated(c context.Context, name string, limit, offset int) ([]Company, error) {
+	log.Printf("limit:%d, offset:%d", limit, offset)
 	rows, err := r.DB.QueryContext(c, findPaginatedQuery, "%"+name+"%", limit, offset)
 	if err != nil {
 		return nil, err

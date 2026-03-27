@@ -6,9 +6,9 @@ import (
 )
 
 type Company struct {
-	Id        uuid.UUID `json:"id"`
-	Name      string    `json:"name"`
-	CreatedAt time.Time `json:"created_at"`
+	Id        uuid.UUID  `json:"id"`
+	Name      string     `json:"name"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 }
 
 type CreateReq struct {
@@ -16,7 +16,8 @@ type CreateReq struct {
 }
 
 type ReadReq struct {
-	Name string `json:"name" binding:"required"`
-	Page int    `json:"page,omitempty"`
-	Size int    `json:"size,omitempty"`
+	Name    string `form:"name,omitempty"`
+	Compact bool   `form:"compact,omitempty"`
+	Page    int    `form:"page,omitempty,default=1"`
+	Size    int    `form:"size,omitempty,default=10"`
 }

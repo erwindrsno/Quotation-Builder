@@ -1,4 +1,4 @@
-package company
+package item_status
 
 import (
 	"net/http"
@@ -27,25 +27,10 @@ func (ctrl *Controller) Create(c *gin.Context) {
 
 func (ctrl *Controller) Read(c *gin.Context) {
 	var req ReadReq
-
-	if err := c.ShouldBindQuery(&req); err != nil {
-		responses.Fail(c, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	if req.Compact {
-		if company, err := ctrl.Svc.ReadList(c.Request.Context(), &req); err != nil {
-			responses.Fail(c, http.StatusBadRequest, err.Error())
-		} else {
-			responses.Success(c, http.StatusOK, gin.H{"companies": company})
-		}
-		return
-	}
-
-	if company, err := ctrl.Svc.ReadPaginated(c.Request.Context(), &req); err != nil {
+	if itemStatuses, err := ctrl.Svc.ReadList(c.Request.Context(), &req); err != nil {
 		responses.Fail(c, http.StatusBadRequest, err.Error())
 	} else {
-		responses.Success(c, http.StatusOK, gin.H{"companies": company})
+		responses.Success(c, http.StatusOK, gin.H{"item_statuses": itemStatuses})
 	}
 	return
 }
