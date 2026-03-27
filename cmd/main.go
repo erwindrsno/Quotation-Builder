@@ -5,6 +5,7 @@ import (
 
 	"github.com/erwindrsno/Quotation-Builder/internal/company"
 	"github.com/erwindrsno/Quotation-Builder/internal/database"
+	"github.com/erwindrsno/Quotation-Builder/internal/item_status"
 	"github.com/erwindrsno/Quotation-Builder/internal/role"
 	"github.com/erwindrsno/Quotation-Builder/internal/user"
 	"github.com/erwindrsno/Quotation-Builder/internal/util"
@@ -32,6 +33,10 @@ func main() {
 	companyRepo := &company.Repository{DB: db}
 	companySvc := &company.Service{Repo: companyRepo}
 	companyCtrl := &company.Controller{Svc: companySvc}
+
+	itemStatusRepo := &item_status.Repository{DB: db}
+	itemStatusSvc := &item_status.Service{Repo: itemStatusRepo}
+	itemStatusCtrl := &item_status.Controller{Svc: itemStatusSvc}
 
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
@@ -61,6 +66,12 @@ func main() {
 			{
 				companies.GET("/", companyCtrl.Read)
 				companies.POST("/", companyCtrl.Create)
+			}
+
+			itemStatuses := v1.Group("/item-statuses")
+			{
+				itemStatuses.GET("/", itemStatusCtrl.Read)
+				itemStatuses.POST("/", itemStatusCtrl.Create)
 			}
 		}
 	}

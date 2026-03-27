@@ -28,7 +28,7 @@ func (r *Repository) FindList(c context.Context, name string) ([]ItemStatus, err
 
 	for rows.Next() {
 		var itemStatus ItemStatus
-		err := rows.Scan(&itemStatus.Id, &itemStatus.Name)
+		err := rows.Scan(&itemStatus.Id, &itemStatus.Name, &itemStatus.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
