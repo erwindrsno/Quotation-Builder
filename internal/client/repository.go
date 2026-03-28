@@ -3,14 +3,16 @@ package client
 import (
 	"context"
 	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 type Repository struct {
 	DB *sql.DB
 }
 
-func (r *Repository) Save(c context.Context, name string) error {
-	_, err := r.DB.ExecContext(c, saveQuery, name)
+func (r *Repository) Save(c context.Context, name string, companyId uuid.UUID) error {
+	_, err := r.DB.ExecContext(c, saveQuery, name, companyId)
 	if err != nil {
 		return err
 	}

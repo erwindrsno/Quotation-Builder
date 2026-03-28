@@ -7,7 +7,7 @@ type Service struct {
 }
 
 func (s *Service) Create(c context.Context, req *CreateReq) error {
-	if err := s.Repo.Save(c, req.Name); err != nil {
+	if err := s.Repo.Save(c, req.Name, req.CompanyId); err != nil {
 		return err
 	}
 	return nil

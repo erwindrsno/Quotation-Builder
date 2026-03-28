@@ -2,9 +2,9 @@ package client
 
 const saveQuery = `
 	INSERT INTO clients 
-		(name, created_at) 
+		(name, company_id, created_at) 
 	VALUES 
-		($1, CURRENT_TIMESTAMP)
+		($1, $2, CURRENT_TIMESTAMP)
 `
 
 const findPaginatedQuery = `
