@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/erwindrsno/Quotation-Builder/internal/client"
 	"github.com/erwindrsno/Quotation-Builder/internal/company"
 	"github.com/erwindrsno/Quotation-Builder/internal/database"
 	"github.com/erwindrsno/Quotation-Builder/internal/item_status"
@@ -38,6 +39,10 @@ func main() {
 	itemStatusSvc := &item_status.Service{Repo: itemStatusRepo}
 	itemStatusCtrl := &item_status.Controller{Svc: itemStatusSvc}
 
+	clientRepo := &client.Repository{DB: db}
+	clientSvc := &client.Service{Repo: clientRepo}
+	clientCtrl := &client.Controller{Svc: clientSvc}
+
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -51,27 +56,33 @@ func main() {
 		{
 			users := v1.Group("/users")
 			{
-				users.GET("/", userCtrl.Read)
-				users.POST("/", userCtrl.Create)
+				users.GET("", userCtrl.Read)
+				users.POST("", userCtrl.Create)
 				users.POST("/login", userCtrl.Login)
 			}
 
 			roles := v1.Group("/roles")
 			{
-				roles.GET("/", roleCtrl.Read)
-				roles.POST("/", roleCtrl.Create)
+				roles.GET("", roleCtrl.Read)
+				roles.POST("", roleCtrl.Create)
 			}
 
 			companies := v1.Group("/companies")
 			{
-				companies.GET("/", companyCtrl.Read)
-				companies.POST("/", companyCtrl.Create)
+				companies.GET("", companyCtrl.Read)
+				companies.POST("", companyCtrl.Create)
 			}
 
 			itemStatuses := v1.Group("/item-statuses")
 			{
-				itemStatuses.GET("/", itemStatusCtrl.Read)
-				itemStatuses.POST("/", itemStatusCtrl.Create)
+				itemStatuses.GET("", itemStatusCtrl.Read)
+				itemStatuses.POST("", itemStatusCtrl.Create)
+			}
+
+			client := v1.Group("/clients")
+			{
+				client.GET("", clientCtrl.Read)
+				client.POST("", clientCtrl.Create)
 			}
 		}
 	}
