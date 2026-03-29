@@ -24,15 +24,15 @@ func (r *Repository) Find(c context.Context, name string, limit, offset int) ([]
 	}
 	defer rows.Close()
 
-	users := make([]User, 0, limit)
+	items := make([]User, 0, limit)
 
 	for rows.Next() {
-		var u User
-		err := rows.Scan(&u.Id, &u.Username, &u.Name, &u.RoleId, &u.CreatedAt, &u.UpdatedAt)
+		var item User
+		err := rows.Scan(&item.Id, &item.Username, &item.Name, &item.RoleId, &item.CreatedAt, &item.UpdatedAt)
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, u)
+		items = append(items, item)
 	}
 
 	// check for errors that happened during iteration
@@ -40,7 +40,7 @@ func (r *Repository) Find(c context.Context, name string, limit, offset int) ([]
 		return nil, err
 	}
 
-	return users, nil
+	return items, nil
 }
 
 func (r *Repository) FindStoredHashByUsername(c context.Context, username string) (string, error) {

@@ -3,7 +3,6 @@ package company
 import (
 	"context"
 	"database/sql"
-	"log"
 )
 
 type Repository struct {
@@ -25,15 +24,15 @@ func (r *Repository) FindList(c context.Context, name string) ([]Company, error)
 	}
 	defer rows.Close()
 
-	companies := make([]Company, 0)
+	items := make([]Company, 0)
 
 	for rows.Next() {
-		var company Company
-		err := rows.Scan(&company.Id, &company.Name)
+		var item Company
+		err := rows.Scan(&item.Id, &item.Name)
 		if err != nil {
 			return nil, err
 		}
-		companies = append(companies, company)
+		items = append(items, item)
 	}
 
 	// check for errors that happened during iteration
@@ -41,26 +40,25 @@ func (r *Repository) FindList(c context.Context, name string) ([]Company, error)
 		return nil, err
 	}
 
-	return companies, nil
+	return items, nil
 }
 
 func (r *Repository) FindPaginated(c context.Context, name string, limit, offset int) ([]Company, error) {
-	log.Printf("limit:%d, offset:%d", limit, offset)
 	rows, err := r.DB.QueryContext(c, findPaginatedQuery, "%"+name+"%", limit, offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	companies := make([]Company, 0)
+	items := make([]Company, 0)
 
 	for rows.Next() {
-		var company Company
-		err := rows.Scan(&company.Id, &company.Name, &company.CreatedAt)
+		var item Company
+		err := rows.Scan(&item.Id, &item.Name, &item.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
-		companies = append(companies, company)
+		items = append(items, item)
 	}
 
 	// check for errors that happened during iteration
@@ -68,5 +66,5 @@ func (r *Repository) FindPaginated(c context.Context, name string, limit, offset
 		return nil, err
 	}
 
-	return companies, nil
+	return items, nil
 }

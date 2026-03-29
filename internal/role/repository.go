@@ -24,15 +24,15 @@ func (r *Repository) Find(c context.Context) ([]Role, error) {
 	}
 	defer rows.Close()
 
-	roles := make([]Role, 0)
+	items := make([]Role, 0)
 
 	for rows.Next() {
-		var r Role
-		err := rows.Scan(&r.Id, &r.Name, &r.CreatedAt)
+		var item Role
+		err := rows.Scan(&item.Id, &item.Name, &item.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
-		roles = append(roles, r)
+		items = append(items, item)
 	}
 
 	// check for errors that happened during iteration
@@ -40,5 +40,5 @@ func (r *Repository) Find(c context.Context) ([]Role, error) {
 		return nil, err
 	}
 
-	return roles, nil
+	return items, nil
 }

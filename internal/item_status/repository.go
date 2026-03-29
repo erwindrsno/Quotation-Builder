@@ -24,15 +24,15 @@ func (r *Repository) FindList(c context.Context, name string) ([]ItemStatus, err
 	}
 	defer rows.Close()
 
-	itemStatuses := make([]ItemStatus, 0)
+	items := make([]ItemStatus, 0)
 
 	for rows.Next() {
-		var itemStatus ItemStatus
-		err := rows.Scan(&itemStatus.Id, &itemStatus.Name, &itemStatus.CreatedAt)
+		var item ItemStatus
+		err := rows.Scan(&item.Id, &item.Name, &item.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
-		itemStatuses = append(itemStatuses, itemStatus)
+		items = append(items, item)
 	}
 
 	// check for errors that happened during iteration
@@ -40,5 +40,5 @@ func (r *Repository) FindList(c context.Context, name string) ([]ItemStatus, err
 		return nil, err
 	}
 
-	return itemStatuses, nil
+	return items, nil
 }

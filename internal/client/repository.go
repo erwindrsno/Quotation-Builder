@@ -26,15 +26,15 @@ func (r *Repository) FindList(c context.Context, name string) ([]Client, error) 
 	}
 	defer rows.Close()
 
-	clients := make([]Client, 0)
+	items := make([]Client, 0)
 
 	for rows.Next() {
-		var client Client
-		err := rows.Scan(&client.Id, &client.Name)
+		var item Client
+		err := rows.Scan(&item.Id, &item.Name)
 		if err != nil {
 			return nil, err
 		}
-		clients = append(clients, client)
+		items = append(items, item)
 	}
 
 	// check for errors that happened during iteration
@@ -42,7 +42,7 @@ func (r *Repository) FindList(c context.Context, name string) ([]Client, error) 
 		return nil, err
 	}
 
-	return clients, nil
+	return items, nil
 }
 
 func (r *Repository) FindPaginated(c context.Context, name string, limit, offset int) ([]Client, error) {
@@ -52,15 +52,15 @@ func (r *Repository) FindPaginated(c context.Context, name string, limit, offset
 	}
 	defer rows.Close()
 
-	clients := make([]Client, 0)
+	items := make([]Client, 0)
 
 	for rows.Next() {
-		var client Client
-		err := rows.Scan(&client.Id, &client.Name, &client.CreatedAt)
+		var item Client
+		err := rows.Scan(&item.Id, &item.Name, &item.CreatedAt)
 		if err != nil {
 			return nil, err
 		}
-		clients = append(clients, client)
+		items = append(items, item)
 	}
 
 	// check for errors that happened during iteration
@@ -68,5 +68,5 @@ func (r *Repository) FindPaginated(c context.Context, name string, limit, offset
 		return nil, err
 	}
 
-	return clients, nil
+	return items, nil
 }
