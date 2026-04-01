@@ -61,12 +61,17 @@ func main() {
 		{
 			users := v1.Group("/users")
 			{
-				users.GET("", userCtrl.Read)
-				users.POST("", userCtrl.Create)
 				users.POST("/login", userCtrl.Login)
+				protected := users.Group("")
+				protected.Use(util.AuthMiddleware())
+				{
+					protected.GET("", userCtrl.Read)
+					protected.POST("", userCtrl.Create)
+				}
 			}
 
 			roles := v1.Group("/roles")
+			roles.Use(util.AuthMiddleware())
 			{
 				roles.GET("", roleCtrl.Read)
 				roles.POST("", roleCtrl.Create)

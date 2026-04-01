@@ -58,7 +58,8 @@ func (ctrl *Controller) Login(c *gin.Context) {
 		} else {
 			responses.Fail(c, http.StatusBadRequest, err.Error())
 		}
-		responses.Success(c, http.StatusOK, gin.H{"token": ss})
 		return
+	} else {
+		responses.Success(c, http.StatusOK, gin.H{"token": ss})
 	}
 }
