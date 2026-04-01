@@ -7,6 +7,7 @@ import (
 	"github.com/erwindrsno/Quotation-Builder/internal/company"
 	"github.com/erwindrsno/Quotation-Builder/internal/database"
 	"github.com/erwindrsno/Quotation-Builder/internal/item_status"
+	"github.com/erwindrsno/Quotation-Builder/internal/product"
 	"github.com/erwindrsno/Quotation-Builder/internal/role"
 	"github.com/erwindrsno/Quotation-Builder/internal/user"
 	"github.com/erwindrsno/Quotation-Builder/internal/util"
@@ -42,6 +43,10 @@ func main() {
 	clientRepo := &client.Repository{DB: db}
 	clientSvc := &client.Service{Repo: clientRepo}
 	clientCtrl := &client.Controller{Svc: clientSvc}
+
+	productRepo := &product.Repository{DB: db}
+	productSvc := &product.Service{Repo: productRepo}
+	productCtrl := &product.Controller{Svc: productSvc}
 
 	router := gin.Default()
 	router.GET("/ping", func(c *gin.Context) {
@@ -79,10 +84,16 @@ func main() {
 				itemStatuses.POST("", itemStatusCtrl.Create)
 			}
 
-			client := v1.Group("/clients")
+			clients := v1.Group("/clients")
 			{
-				client.GET("", clientCtrl.Read)
-				client.POST("", clientCtrl.Create)
+				clients.GET("", clientCtrl.Read)
+				clients.POST("", clientCtrl.Create)
+			}
+
+			products := v1.Group("/products")
+			{
+				products.GET("", productCtrl.Read)
+				products.POST("", productCtrl.Create)
 			}
 		}
 	}

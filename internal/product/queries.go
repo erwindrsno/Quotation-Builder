@@ -2,13 +2,13 @@ package product
 
 const saveQuery = `
 	INSERT INTO products 
-		(name, part_number, description, base_units, manufacturer_brand, created_at) 
+		(name, part_number, description, base_unit, manufacturer_brand, created_at) 
 	VALUES 
 		($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
 `
 
 const findPaginatedQuery = `
-	SELECT id, name, part_number, description, base_units, manufacturer_brand, created_at)
+	SELECT id, name, part_number, description, base_unit, manufacturer_brand, created_at)
 	FROM products
   WHERE name ILIKE $1
   ORDER BY created_at ASC, id ASC
@@ -17,7 +17,7 @@ const findPaginatedQuery = `
 
 const findListQuery = `
 	SELECT id, name
-	FROM companies
+	FROM products
   WHERE name ILIKE $1
 	ORDER BY name ASC;
 `
