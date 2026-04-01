@@ -97,8 +97,8 @@ func (a *App) setRoutes() {
 	}
 }
 
-func (a *App) Run(port int) {
-	a.Run(port) // listens on 0.0.0.0:8080 by default
+func (a *App) Run(port string) {
+	a.Router.Run(port)
 }
 
 func (a *App) CloseDB() {

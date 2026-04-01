@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/erwindrsno/Quotation-Builder/internal/app"
 	"github.com/joho/godotenv"
@@ -17,9 +17,7 @@ func main() {
 	}
 
 	server := app.New()
-	port, err := strconv.Atoi(os.Getenv("APP_PORT"))
-	if err != nil {
-		log.Fatal("Failed to convert string to int for SERVER_PORT")
-	}
+	defer server.CloseDB()
+	port := fmt.Sprintf(":%s", os.Getenv("APP_PORT"))
 	server.Run(port)
 }
