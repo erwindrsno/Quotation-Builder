@@ -1,12 +1,14 @@
 package util
 
 import (
+	"net/http"
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/erwindrsno/Quotation-Builder/internal/responses"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"net/http"
-	"strconv"
-	"time"
 )
 
 var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
