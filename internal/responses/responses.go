@@ -29,7 +29,6 @@ func Success(c *gin.Context, status int, data interface{}) {
 		Success: true,
 		Data:    data,
 	})
-	c.Abort()
 }
 
 // Fail sends an error response.

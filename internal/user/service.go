@@ -25,19 +25,23 @@ func (s *Service) Read(c context.Context, data *Read) ([]User, error) {
 	return s.Repo.Find(c, data.Name, data.Size, offset)
 }
 
-func (s *Service) Login(c context.Context, data *Login) error {
+func (s *Service) Login(c context.Context, data *Login) (string, error) {
 	storedHash, err := s.Repo.FindStoredHashByUsername(c, data.Username)
 	if err != nil {
-		return errInvalidCredentials
+		return "", errInvalidCredentials
 	}
 
 	match, err := s.Hasher.Verify(data.Password, storedHash)
 	if err != nil {
 		fmt.Printf("[AUTH ERROR] User: %s, Error: %v\n", data.Username, err)
-		return errInternalError
+		return "", errInternalError
 	}
 	if !match {
-		return errInvalidCredentials
+		return "", errInvalidCredentials
 	}
-	return nil
+	ss, err := util.GenerateToken(1, "1", "1")
+	if err != nil {
+		return "", errInternalError
+	}
+	return ss, nil
 }

@@ -50,7 +50,7 @@ func (ctrl *Controller) Login(c *gin.Context) {
 		responses.Fail(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	if err := ctrl.Svc.Login(c.Request.Context(), &req); err != nil {
+	if ss, err := ctrl.Svc.Login(c.Request.Context(), &req); err != nil {
 		if errors.Is(err, errInternalError) {
 			responses.Fail(c, http.StatusInternalServerError, err.Error())
 		} else if errors.Is(err, errInvalidCredentials) {
@@ -58,7 +58,7 @@ func (ctrl *Controller) Login(c *gin.Context) {
 		} else {
 			responses.Fail(c, http.StatusBadRequest, err.Error())
 		}
+		responses.Success(c, http.StatusOK, gin.H{"token": ss})
 		return
 	}
-	responses.Success(c, http.StatusOK, gin.H{"message": "ok"})
 }
