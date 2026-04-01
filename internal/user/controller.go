@@ -1,14 +1,23 @@
 package user
 
 import (
+	"database/sql"
 	"errors"
-	"github.com/erwindrsno/Quotation-Builder/internal/responses"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/erwindrsno/Quotation-Builder/internal/responses"
+	"github.com/erwindrsno/Quotation-Builder/internal/util"
+	"github.com/gin-gonic/gin"
 )
 
 type Controller struct {
 	Svc *Service
+}
+
+func New(db *sql.DB, hasher util.Hasher) *Controller {
+	repo := &Repository{DB: db}
+	svc := &Service{Repo: repo, Hasher: hasher}
+	return &Controller{Svc: svc}
 }
 
 func (ctrl *Controller) Create(c *gin.Context) {

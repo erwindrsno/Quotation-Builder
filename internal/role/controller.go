@@ -1,13 +1,21 @@
 package role
 
 import (
+	"database/sql"
+	"net/http"
+
 	"github.com/erwindrsno/Quotation-Builder/internal/responses"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type Controller struct {
 	Svc *Service
+}
+
+func New(db *sql.DB) *Controller {
+	repo := &Repository{DB: db}
+	svc := &Service{Repo: repo}
+	return &Controller{Svc: svc}
 }
 
 func (ctrl *Controller) Create(c *gin.Context) {

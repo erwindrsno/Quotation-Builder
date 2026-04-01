@@ -40,29 +40,13 @@ func (a *App) setRoutes() {
 	})
 
 	var hasher util.Hasher = util.ArgonHasher{}
-	userRepo := &user.Repository{DB: a.DB}
-	userSvc := &user.Service{Repo: userRepo, Hasher: hasher}
-	userCtrl := &user.Controller{Svc: userSvc}
 
-	roleRepo := &role.Repository{DB: a.DB}
-	roleSvc := &role.Service{Repo: roleRepo}
-	roleCtrl := &role.Controller{Svc: roleSvc}
-
-	companyRepo := &company.Repository{DB: a.DB}
-	companySvc := &company.Service{Repo: companyRepo}
-	companyCtrl := &company.Controller{Svc: companySvc}
-
-	itemStatusRepo := &item_status.Repository{DB: a.DB}
-	itemStatusSvc := &item_status.Service{Repo: itemStatusRepo}
-	itemStatusCtrl := &item_status.Controller{Svc: itemStatusSvc}
-
-	clientRepo := &client.Repository{DB: a.DB}
-	clientSvc := &client.Service{Repo: clientRepo}
-	clientCtrl := &client.Controller{Svc: clientSvc}
-
-	productRepo := &product.Repository{DB: a.DB}
-	productSvc := &product.Service{Repo: productRepo}
-	productCtrl := &product.Controller{Svc: productSvc}
+	userCtrl := user.New(a.DB, hasher)
+	roleCtrl := role.New(a.DB)
+	companyCtrl := company.New(a.DB)
+	clientCtrl := client.New(a.DB)
+	itemStatusCtrl := item_status.New(a.DB)
+	productCtrl := product.New(a.DB)
 
 	api := a.Router.Group("/api")
 	{
