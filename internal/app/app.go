@@ -8,6 +8,7 @@ import (
 	"github.com/erwindrsno/Quotation-Builder/internal/database"
 	"github.com/erwindrsno/Quotation-Builder/internal/item_status"
 	"github.com/erwindrsno/Quotation-Builder/internal/product"
+	"github.com/erwindrsno/Quotation-Builder/internal/quotation"
 	"github.com/erwindrsno/Quotation-Builder/internal/role"
 	"github.com/erwindrsno/Quotation-Builder/internal/user"
 	"github.com/erwindrsno/Quotation-Builder/internal/util"
@@ -47,6 +48,7 @@ func (a *App) setRoutes() {
 	clientCtrl := client.New(a.DB)
 	itemStatusCtrl := item_status.New(a.DB)
 	productCtrl := product.New(a.DB)
+	quotationCtrl := quotation.New(a.DB)
 
 	api := a.Router.Group("/api")
 	{
@@ -56,7 +58,7 @@ func (a *App) setRoutes() {
 			{
 				users.POST("/login", userCtrl.Login)
 				protected := users.Group("")
-				protected.Use(util.AuthMiddleware())
+				// protected.Use(util.AuthMiddleware())
 				{
 					protected.GET("", userCtrl.Read)
 					protected.POST("", userCtrl.Create)
@@ -64,7 +66,7 @@ func (a *App) setRoutes() {
 			}
 
 			roles := v1.Group("/roles")
-			roles.Use(util.AuthMiddleware())
+			// roles.Use(util.AuthMiddleware())
 			{
 				roles.GET("", roleCtrl.Read)
 				roles.POST("", roleCtrl.Create)
@@ -92,6 +94,13 @@ func (a *App) setRoutes() {
 			{
 				products.GET("", productCtrl.Read)
 				products.POST("", productCtrl.Create)
+			}
+
+			quotations := v1.Group("/quotations")
+			{
+				quotations.GET("", quotationCtrl.ReadPaginated)
+				quotations.GET("/:id", quotationCtrl.ReadOne)
+				quotations.POST("", quotationCtrl.Create)
 			}
 		}
 	}

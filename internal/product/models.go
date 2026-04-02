@@ -12,6 +12,7 @@ type Product struct {
 	PartNumber        string     `json:"part_number"`
 	Description       string     `json:"description"`
 	BaseUnit          string     `json:"base_unit"`
+	BasePrice         int64      `json:"base_price"`
 	ManufacturerBrand string     `json:"manufacturer_brand"`
 	CreatedAt         *time.Time `json:"created_at,omitempty"`
 	UpdatedAt         *time.Time `json:"updated_at,omitempty"`
@@ -22,6 +23,7 @@ type CreateReq struct {
 	PartNumber        string `json:"part_number" binding:"required"`
 	Description       string `json:"description" binding:"required"`
 	BaseUnit          string `json:"base_unit" binding:"required"`
+	BasePrice         int64  `json:"base_price" binding:"required"`
 	ManufacturerBrand string `json:"manufacturer_brand" binding:"required"`
 }
 

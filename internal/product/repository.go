@@ -10,7 +10,7 @@ type Repository struct {
 }
 
 func (r *Repository) Save(c context.Context, item Product) error {
-	_, err := r.DB.ExecContext(c, saveQuery, item.Name, item.PartNumber, item.Description, item.BaseUnit, item.ManufacturerBrand)
+	_, err := r.DB.ExecContext(c, saveQuery, item.Name, item.PartNumber, item.Description, item.BaseUnit, item.BasePrice, item.ManufacturerBrand)
 	if err != nil {
 		return err
 	}

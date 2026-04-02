@@ -1,0 +1,65 @@
+package quotation
+
+import (
+	"database/sql"
+	"net/http"
+
+	"github.com/erwindrsno/Quotation-Builder/internal/responses"
+	"github.com/gin-gonic/gin"
+)
+
+type Controller struct {
+	Svc *Service
+}
+
+func New(db *sql.DB) *Controller {
+	repo := &Repository{DB: db}
+	svc := &Service{Repo: repo}
+	return &Controller{Svc: svc}
+}
+
+func (ctrl *Controller) Create(c *gin.Context) {
+	var req CreateReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	if err := ctrl.Svc.Create(c, &req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
+	} else {
+		responses.Success(c, http.StatusCreated, gin.H{"message": "created."})
+	}
+	return
+}
+
+func (ctrl *Controller) ReadPaginated(c *gin.Context) {
+	var req ReadAllReq
+
+	if err := c.ShouldBindQuery(&req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if items, err := ctrl.Svc.ReadPaginated(c.Request.Context(), &req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
+	} else {
+		responses.Success(c, http.StatusOK, gin.H{"quotations": items})
+	}
+	return
+}
+
+func (ctrl *Controller) ReadOne(c *gin.Context) {
+	var req ReadOneReq
+
+	if err := c.ShouldBindQuery(&req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if items, err := ctrl.Svc.ReadOne(c.Request.Context(), &req); err != nil {
+		responses.Fail(c, http.StatusBadRequest, err.Error())
+	} else {
+		responses.Success(c, http.StatusOK, gin.H{"products": items})
+	}
+	return
+}
