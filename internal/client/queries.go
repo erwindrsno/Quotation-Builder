@@ -16,8 +16,10 @@ const findPaginatedQuery = `
 `
 
 const findListQuery = `
-	SELECT id, name
-	FROM clients
-  WHERE name ILIKE $1
-	ORDER BY name ASC;
+	SELECT c.id, c.name AS client_name, co.name AS company_name
+	FROM clients c
+	INNER JOIN companies co
+	ON c.company_id = co.id
+  WHERE c.name ILIKE $1
+	ORDER BY c.name ASC;
 `
