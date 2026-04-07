@@ -3,6 +3,8 @@ package user
 import (
 	"context"
 	"database/sql"
+
+	"github.com/erwindrsno/Quotation-Builder/internal/role"
 )
 
 type Repository struct {
@@ -28,7 +30,8 @@ func (r *Repository) Find(c context.Context, name string, limit, offset int) ([]
 
 	for rows.Next() {
 		var item User
-		err := rows.Scan(&item.Id, &item.Username, &item.Name, &item.RoleId, &item.CreatedAt, &item.UpdatedAt)
+		item.Role = &role.Role{}
+		err := rows.Scan(&item.Id, &item.Username, &item.Name, &item.RoleId, &item.CreatedAt, &item.UpdatedAt, &item.Role.Name)
 		if err != nil {
 			return nil, err
 		}

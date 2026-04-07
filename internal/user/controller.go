@@ -47,9 +47,11 @@ func (ctrl *Controller) Read(c *gin.Context) {
 	if users, err := ctrl.Svc.Read(c.Request.Context(), &req); err != nil {
 		responses.Fail(c, http.StatusBadRequest, err.Error())
 	} else {
+		users := util.MapList(users, func(u User) ReadResponse {
+			return u.ToReadResponse()
+		})
 		responses.Success(c, http.StatusOK, gin.H{"users": users})
 	}
-	return
 }
 
 func (ctrl *Controller) Login(c *gin.Context) {
