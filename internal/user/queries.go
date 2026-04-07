@@ -21,3 +21,10 @@ const findPasswordByUsername = `
   FROM users
   WHERE username = $1
 `
+
+const findByUsernameQuery = `
+	SELECT u.id, u.username, u.name, u.password, r.name AS role_name
+	FROM users u
+	INNER JOIN roles r ON u.role_id = r.id
+	WHERE u.username = $1
+`

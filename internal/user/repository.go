@@ -46,14 +46,15 @@ func (r *Repository) Find(c context.Context, name string, limit, offset int) ([]
 	return items, nil
 }
 
-func (r *Repository) FindStoredHashByUsername(c context.Context, username string) (string, error) {
-	row := r.DB.QueryRowContext(c, findPasswordByUsername, username)
+func (r *Repository) FindByUsername(c context.Context, username string) (*User, error) {
+	row := r.DB.QueryRowContext(c, findByUsernameQuery, username)
 
-	var password string
+	var item User
+	item.Role = &role.Role{}
 
-	err := row.Scan(&password)
+	err := row.Scan(&item.Id, &item.Username, &item.Name, &item.Password, &item.Role.Name)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return password, nil
+	return &item, nil
 }

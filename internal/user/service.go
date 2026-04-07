@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"fmt"
+
 	"github.com/erwindrsno/Quotation-Builder/internal/util"
 )
 
@@ -26,12 +27,12 @@ func (s *Service) Read(c context.Context, req *Read) ([]User, error) {
 }
 
 func (s *Service) Login(c context.Context, req *Login) (string, error) {
-	storedHash, err := s.Repo.FindStoredHashByUsername(c, req.Username)
+	storedUser, err := s.Repo.FindByUsername(c, req.Username)
 	if err != nil {
 		return "", errInvalidCredentials
 	}
 
-	match, err := s.Hasher.Verify(req.Password, storedHash)
+	match, err := s.Hasher.Verify(req.Password, storedUser.Password)
 	if err != nil {
 		fmt.Printf("[AUTH ERROR] User: %s, Error: %v\n", req.Username, err)
 		return "", errInternalError
@@ -39,8 +40,8 @@ func (s *Service) Login(c context.Context, req *Login) (string, error) {
 	if !match {
 		return "", errInvalidCredentials
 	}
-	//TODO: Need to change parameter for generate token
-	ss, err := util.GenerateToken(1, "1", "1")
+
+	ss, err := util.GenerateToken(storedUser.Id, storedUser.Username, storedUser.Role.Name)
 	if err != nil {
 		return "", errInternalError
 	}
